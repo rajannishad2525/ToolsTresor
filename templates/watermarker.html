@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-2xl mx-auto px-8 py-12 text-center">
+    <h1 class="text-4xl font-bold text-amber-500 mb-4">Image Watermarker</h1>
+    <form action="/api/watermark" method="POST" enctype="multipart/form-data" class="bg-slate-900 p-8 rounded-lg border border-slate-800 space-y-4">
+        <input type="file" name="image" accept="image/*" required class="text-white w-full">
+        <input type="text" name="text" placeholder="Watermark Text (e.g. Confidential)" required class="w-full bg-slate-950 border border-slate-700 p-2 text-white rounded">
+        <button class="bg-blue-600 text-white px-8 py-3 rounded font-bold w-full">Add Watermark & Download</button>
+    </form>
+</div>
+{% endblock %}

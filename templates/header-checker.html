@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-8 py-12">
+    <div class="text-center mb-10">
+        <h1 class="text-4xl font-bold text-amber-500 mb-2">Website Header Checker</h1>
+        <p class="text-slate-400">Analyze HTTP headers for any URL.</p>
+    </div>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-lg p-8 shadow-xl">
+        <div class="flex gap-4 mb-6">
+            <input type="text" id="urlInput" class="flex-grow bg-slate-950 border border-slate-700 rounded p-3 text-white outline-none focus:border-amber-500" placeholder="google.com">
+            <button onclick="checkHeaders()" class="bg-amber-600 hover:bg-amber-700 text-white px-6 rounded font-bold">Check</button>
+        </div>
+        
+        <pre id="headerOutput" class="bg-black/50 p-4 rounded border border-slate-800 text-green-400 font-mono text-sm min-h-[200px] overflow-x-auto">Results will appear here...</pre>
+    </div>
+</div>
+
+<script>
+    async function checkHeaders() {
+        const url = document.getElementById('urlInput').value;
+        document.getElementById('headerOutput').innerText = "Loading...";
+        
+        try {
+            const res = await fetch('/api/header-checker', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({url: url})
+            });
+            const data = await res.json();
+            document.getElementById('headerOutput').innerText = data.result || "Error fetching headers";
+        } catch(e) {
+            document.getElementById('headerOutput').innerText = "Failed to connect.";
+        }
+    }
+</script>
+{% endblock %}

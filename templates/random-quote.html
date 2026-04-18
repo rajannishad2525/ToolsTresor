@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-8 py-20 text-center">
+    <h1 class="text-4xl font-bold text-amber-500 mb-2">Random Quote</h1>
+    <p class="text-slate-400 mb-12">Get a dose of inspiration.</p>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-lg p-10 shadow-xl max-w-2xl mx-auto relative">
+        <div class="text-6xl text-slate-700 absolute top-4 left-4 font-serif">“</div>
+        
+        <blockquote class="text-2xl text-white font-serif italic mb-6" id="quoteText">
+            Click the button to get inspired...
+        </blockquote>
+        <cite class="text-amber-500 not-italic font-bold block mb-8" id="quoteAuthor">- Toolstresor</cite>
+
+        <button onclick="getQuote()" class="bg-slate-800 hover:bg-slate-700 text-white px-8 py-3 rounded-full border border-slate-600 transition">New Quote</button>
+    </div>
+</div>
+
+<script>
+    async function getQuote() {
+        const res = await fetch('/api/random-quote');
+        const data = await res.json();
+        document.getElementById('quoteText').innerText = data.quote;
+        document.getElementById('quoteAuthor').innerText = "- " + data.author;
+    }
+</script>
+{% endblock %}

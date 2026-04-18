@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-8 py-12">
+    <div class="text-center mb-10">
+        <h1 class="text-4xl font-bold text-amber-500 mb-2">Lorem Ipsum Generator</h1>
+        <p class="text-slate-400">Generate dummy text for your projects.</p>
+    </div>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-lg p-8 shadow-xl max-w-3xl mx-auto">
+        <div class="flex justify-center items-center gap-4 mb-6">
+            <label class="text-slate-300">Paragraphs:</label>
+            <input type="number" id="paraCount" value="3" min="1" max="10" class="bg-slate-950 border border-slate-700 text-white p-2 rounded w-20 text-center">
+            <button onclick="generateLorem()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-bold">Generate</button>
+        </div>
+
+        <textarea id="loremOutput" readonly class="w-full h-64 bg-slate-950 border border-slate-700 rounded-lg p-4 text-slate-300 leading-relaxed resize-none" placeholder="Text will appear here..."></textarea>
+    </div>
+</div>
+
+<script>
+    async function generateLorem() {
+        const count = document.getElementById('paraCount').value;
+        const res = await fetch('/api/lorem-ipsum', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({count: count})
+        });
+        const data = await res.json();
+        document.getElementById('loremOutput').value = data.result;
+    }
+</script>
+{% endblock %}

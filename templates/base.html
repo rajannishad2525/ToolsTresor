@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Toolstresor</title>
+
+   
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+
+
+    <style>
+
+        /* Global Settings */
+
+        :root {
+
+            --bg-color: #0f172a;       /* Slate-900 */
+
+            --card-bg: #1e293b;        /* Slate-800 */
+
+            --text-color: #f8fafc;     /* Slate-50 */
+
+            --primary-color: #f59e0b;  /* Amber-500 */
+
+            --border-color: #334155;   /* Slate-700 */
+
+        }
+
+
+
+        body {
+
+            background-color: var(--bg-color);
+
+            color: var(--text-color);
+
+            font-family: 'Inter', sans-serif;
+
+            display: flex;
+
+            flex-direction: column;
+
+            min-height: 100vh;
+
+            margin: 0;
+
+        }
+
+
+
+        /* Navbar */
+
+        nav {
+
+            background-color: rgba(15, 23, 42, 0.95);
+
+            border-bottom: 1px solid var(--border-color);
+
+            backdrop-filter: blur(10px);
+
+        }
+
+
+
+        /* Custom Scrollbar */
+
+        ::-webkit-scrollbar {
+
+            width: 8px;
+
+        }
+
+        ::-webkit-scrollbar-track {
+
+            background: var(--bg-color);
+
+        }
+
+        ::-webkit-scrollbar-thumb {
+
+            background: var(--border-color);
+
+            border-radius: 4px;
+
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+
+            background: var(--primary-color);
+
+        }
+
+
+
+        /* Inputs & Cards */
+
+        input, textarea {
+
+            background-color: #020617 !important; /* Darker than slate-950 */
+
+            border: 1px solid var(--border-color) !important;
+
+            color: white !important;
+
+        }
+
+       
+
+        input:focus, textarea:focus {
+
+            border-color: var(--primary-color) !important;
+
+            outline: none !important;
+
+            box-shadow: 0 0 0 1px var(--primary-color);
+
+        }
+
+
+
+        /* Tables */
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+        }
+
+        th, td {
+
+            padding: 1rem;
+
+            border-bottom: 1px solid var(--border-color);
+
+        }
+
+        tr:hover {
+
+            background-color: rgba(255,255,255, 0.05);
+
+        }
+
+    </style>
+
+</head>
+<body class="bg-slate-950 text-white min-h-screen flex flex-col">
+
+    <nav class="sticky top-0 z-50 bg-slate-950/95 backdrop-blur border-b border-slate-800 w-full">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 items-center justify-between w-full">
+                
+                <div class="flex-shrink-0">
+                    <a href="{{ url_for('home') }}" class="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-500 to-orange-600 hover:opacity-80 transition">
+                        Toolstresor
+                    </a>
+                </div>
+                
+                <div class="flex items-center gap-6">
+                    <a href="{{ url_for('about_us') }}" class="text-sm font-medium text-slate-300 hover:text-amber-500 transition hidden sm:block">About</a>
+                    <a href="{{ url_for('contact_us') }}" class="text-sm font-medium text-slate-300 hover:text-amber-500 transition hidden sm:block">Contact</a>
+                    
+                    {% if current_user.is_authenticated %}
+                        
+                        {% if current_user.is_admin %}
+                            <a href="{{ url_for('admin_panel') }}" class="text-xs font-bold bg-amber-500/10 text-amber-500 border border-amber-500/20 px-3 py-1 rounded uppercase tracking-wider hover:bg-amber-500 hover:text-slate-900 transition">
+                                Admin
+                            </a>
+                        {% endif %}
+                        
+                        <a href="{{ url_for('logout') }}" class="text-sm font-bold bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition shadow-md">
+                            Logout
+                        </a>
+
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="text-sm font-medium text-slate-300 hover:text-white transition">Login</a>
+                        <a href="{{ url_for('signup') }}" class="text-sm font-bold bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-5 py-2 rounded-lg transition shadow-md transform hover:scale-105">
+                            Sign Up
+                        </a>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="max-w-4xl mx-auto mt-6 px-4">
+                {% for message in messages %}
+                    <div class="bg-slate-800 border-l-4 border-amber-500 text-slate-200 px-4 py-3 rounded shadow-lg flash-message">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <main class="flex-grow w-full">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="border-t border-slate-800 bg-slate-900 py-10 mt-auto w-full">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-slate-500 text-sm mb-4">© 2025 Toolstresor. All Rights Reserved.</p>
+            <div class="flex justify-center gap-6 text-sm">
+                <a href="{{ url_for('about_us') }}" class="text-slate-400 hover:text-amber-500 transition">About</a>
+                <a href="{{ url_for('contact_us') }}" class="text-slate-400 hover:text-amber-500 transition">Contact</a>
+                <a href="{{ url_for('privacy_policy') }}" class="text-slate-400 hover:text-amber-500 transition">Privacy Policy</a>
+                <a href="{{ url_for('terms_of_service') }}" class="text-slate-400 hover:text-amber-500 transition">Terms</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

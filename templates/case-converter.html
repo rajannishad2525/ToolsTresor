@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-8 py-12">
+    <div class="text-center mb-10">
+        <h1 class="text-4xl font-bold text-amber-500 mb-2">Case Converter</h1>
+        <p class="text-slate-400">Convert text to uppercase, lowercase, and more.</p>
+    </div>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-lg p-6 shadow-xl">
+        <textarea id="caseInput" class="w-full h-48 bg-slate-950 border border-slate-700 rounded-lg p-4 text-white focus:border-amber-500 outline-none resize-none" placeholder="Type your text here..."></textarea>
+        
+        <div class="flex flex-wrap justify-center gap-4 my-6">
+            <button onclick="convert('uppercase')" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded border border-slate-700">UPPERCASE</button>
+            <button onclick="convert('lowercase')" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded border border-slate-700">lowercase</button>
+            <button onclick="convert('titlecase')" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded border border-slate-700">Title Case</button>
+            <button onclick="convert('sentencecase')" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded border border-slate-700">Sentence case</button>
+        </div>
+
+        <textarea id="caseOutput" readonly class="w-full h-48 bg-slate-800 border border-slate-700 rounded-lg p-4 text-slate-300 outline-none resize-none" placeholder="Result will appear here..."></textarea>
+    </div>
+</div>
+
+<script>
+    async function convert(type) {
+        const text = document.getElementById('caseInput').value;
+        const res = await fetch('/api/case-converter', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({text: text, case_type: type})
+        });
+        const data = await res.json();
+        document.getElementById('caseOutput').value = data.result;
+    }
+</script>
+{% endblock %}

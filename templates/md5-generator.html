@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-8 py-12">
+    <div class="text-center mb-10">
+        <h1 class="text-4xl font-bold text-amber-500 mb-2">MD5 Generator</h1>
+        <p class="text-slate-400">Generate secure MD5 hashes from any text.</p>
+    </div>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-lg p-8 shadow-xl max-w-2xl mx-auto">
+        <input type="text" id="md5Input" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-4 text-white focus:border-amber-500 outline-none mb-6" placeholder="Enter text to hash...">
+        
+        <button onclick="generateMD5()" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 rounded-lg transition mb-8">
+            Generate Hash
+        </button>
+
+        <div class="bg-slate-950 border border-slate-800 rounded-lg p-4 flex items-center justify-between">
+            <code id="md5Result" class="text-green-400 font-mono text-sm break-all">Hash will appear here</code>
+            <button onclick="navigator.clipboard.writeText(document.getElementById('md5Result').innerText)" class="text-slate-500 hover:text-white ml-4">Copy</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function generateMD5() {
+        const text = document.getElementById('md5Input').value;
+        const res = await fetch('/api/md5-generator', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({text: text})
+        });
+        const data = await res.json();
+        document.getElementById('md5Result').innerText = data.result;
+    }
+</script>
+{% endblock %}

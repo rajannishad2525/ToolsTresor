@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-8 py-20">
+    
+    <a href="{{ url_for('home') }}" class="text-amber-500 hover:text-amber-400 mb-8 inline-flex items-center gap-2 transition-colors">
+        ← Back to Home
+    </a>
+
+    <div class="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-lg p-12 shadow-2xl">
+        <h1 class="text-4xl font-bold mb-6 bg-gradient-to-r from-amber-500 to-orange-600 bg-clip-text text-transparent">
+            About Toolstresor
+        </h1>
+        
+        <div class="space-y-6 text-slate-300 leading-relaxed">
+            <p>
+                Toolstresor is a collection of free, simple, and powerful online tools designed to make your life easier. 
+                We believe that everyone should have access to quality tools without any registration, payment, or hidden fees.
+            </p>
+            
+            <p>
+                Our mission is to provide an all-in-one platform where you can find and use various utilities for everyday tasks, 
+                from text processing to data generation and conversion.
+            </p>
+            
+            <h2 class="text-2xl font-bold text-white mt-8 mb-4 border-b border-slate-700 pb-2">Our Values</h2>
+            <ul class="list-disc list-inside space-y-3 marker:text-amber-500">
+                <li><strong class="text-white">100% Free</strong> - No hidden costs or premium versions</li>
+                <li><strong class="text-white">No Registration</strong> - Use our tools without creating an account</li>
+                <li><strong class="text-white">Security First</strong> - Your data is never stored or shared</li>
+                <li><strong class="text-white">Simple Design</strong> - Intuitive interfaces for all users</li>
+                <li><strong class="text-white">Continuously Updated</strong> - New tools added regularly</li>
+            </ul>
+            
+            <p class="mt-8 pt-4 border-t border-slate-700 italic text-slate-400">
+                Whether you're a developer, student, content creator, or business professional, Toolstresor has something for you.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

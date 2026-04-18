@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-12">
+    
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-white">Write New Article</h1>
+        <a href="{{ url_for('admin_panel') }}" class="text-slate-400 hover:text-white transition">← Back to Dashboard</a>
+    </div>
+
+    <form method="POST" class="grid grid-cols-1 lg:grid-cols-3 gap-8 relative">
+        
+        <div class="lg:col-span-2 space-y-6">
+            
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl">
+                <label class="block text-slate-400 mb-2 text-sm font-bold uppercase">Article Title (H1)</label>
+                <input type="text" id="titleInput" name="title" required 
+                    class="w-full bg-slate-950 border border-slate-700 rounded-lg p-4 text-white text-xl font-bold focus:border-amber-500 outline-none placeholder-slate-700" 
+                    placeholder="e.g. Top 10 Free SEO Tools in 2025">
+            </div>
+
+            <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl min-h-[500px]">
+                <label class="block text-slate-400 mb-2 text-sm font-bold uppercase">Main Content (HTML)</label>
+                <p class="text-xs text-slate-500 mb-4">Use HTML tags like &lt;h2&gt;, &lt;p&gt;, &lt;ul&gt; for formatting.</p>
+                <textarea name="content" rows="25" required 
+                    class="w-full bg-slate-950 border border-slate-700 rounded-lg p-4 text-white font-mono text-sm focus:border-amber-500 outline-none leading-relaxed"
+                    placeholder="<p>Start writing your amazing article here...</p>"></textarea>
+            </div>
+
+        </div>
+
+        <div class="lg:col-span-1">
+            
+            <div class="space-y-6 lg:sticky lg:top-24">
+
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl shadow-xl z-10">
+                    <h3 class="text-white font-bold mb-4 border-b border-slate-800 pb-2">SEO Settings</h3>
+
+                    <div class="mb-4">
+                        <label class="block text-slate-400 mb-1 text-xs font-bold">URL Slug</label>
+                        <input type="text" id="slugInput" name="slug" required 
+                            class="w-full bg-slate-950 border border-slate-700 rounded p-2 text-amber-500 text-sm focus:border-amber-500 outline-none font-mono">
+                        <p class="text-[10px] text-slate-600 mt-1 truncate">toolstresor.com/blog/<span id="slugPreview">...</span></p>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-slate-400 mb-1 text-xs font-bold">Meta Description</label>
+                        <textarea id="metaInput" name="meta_description" rows="3" required maxlength="160"
+                            class="w-full bg-slate-950 border border-slate-700 rounded p-2 text-slate-300 text-sm focus:border-amber-500 outline-none resize-none"></textarea>
+                        <p class="text-[10px] text-right text-slate-500 mt-1"><span id="charCount">0</span>/160 chars</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-slate-400 mb-1 text-xs font-bold">Focus Keywords</label>
+                        <input type="text" name="keywords" 
+                            class="w-full bg-slate-950 border border-slate-700 rounded p-2 text-white text-sm focus:border-amber-500 outline-none" 
+                            placeholder="seo, tools, free">
+                    </div>
+
+                    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition shadow-lg transform hover:scale-[1.02]">
+                        🚀 Publish Article
+                    </button>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl shadow-lg border border-slate-700 z-10">
+                    <h3 class="text-slate-900 font-bold text-xs mb-3 uppercase">Google Search Preview</h3>
+                    
+                    <div class="font-sans break-words">
+                        <div class="flex items-center gap-2 mb-1">
+                            <div class="bg-gray-200 rounded-full w-6 h-6 flex items-center justify-center text-xs shrink-0">T</div>
+                            <div class="flex flex-col overflow-hidden">
+                                <span class="text-xs text-gray-800">Toolstresor</span>
+                                <span class="text-[10px] text-gray-500 truncate">https://toolstresor.com/blog/<span id="googleSlug">...</span></span>
+                            </div>
+                        </div>
+                        <h4 class="text-blue-800 text-lg font-medium hover:underline cursor-pointer leading-snug" id="googleTitle">Your Article Title Here</h4>
+                        <p class="text-sm text-gray-600 line-clamp-2 mt-1" id="googleDesc">
+                            Your meta description will appear here. This is what users will see on Google search results. Make it catchy!
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    const titleInput = document.getElementById('titleInput');
+    const slugInput = document.getElementById('slugInput');
+    const slugPreview = document.getElementById('slugPreview');
+    const metaInput = document.getElementById('metaInput');
+    const charCount = document.getElementById('charCount');
+    
+    const googleTitle = document.getElementById('googleTitle');
+    const googleSlug = document.getElementById('googleSlug');
+    const googleDesc = document.getElementById('googleDesc');
+
+    titleInput.addEventListener('input', function() {
+        const val = this.value;
+        const slug = val.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+        slugInput.value = slug;
+        slugPreview.innerText = slug;
+        googleTitle.innerText = val || "Your Article Title Here";
+        googleSlug.innerText = slug;
+    });
+
+    slugInput.addEventListener('input', function() {
+        const val = this.value.toLowerCase().replace(/[^a-z0-9-]+/g, '');
+        this.value = val;
+        slugPreview.innerText = val;
+        googleSlug.innerText = val;
+    });
+
+    metaInput.addEventListener('input', function() {
+        const val = this.value;
+        charCount.innerText = val.length;
+        if(val.length > 160) charCount.classList.add('text-red-500');
+        else charCount.classList.remove('text-red-500');
+        googleDesc.innerText = val || "Your meta description will appear here...";
+    });
+</script>
+{% endblock %}

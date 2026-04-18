@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-8 py-12 text-center">
+    <h1 class="text-4xl font-bold text-amber-500 mb-2">What is My IP?</h1>
+    <p class="text-slate-400 mb-12">Check your public IP address instantly.</p>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-xl p-12 shadow-2xl inline-block">
+        <div class="text-6xl mb-6">🌍</div>
+        <p class="text-slate-400 text-sm uppercase tracking-widest mb-2">Your IP Address</p>
+        <h2 id="ipDisplay" class="text-4xl md:text-5xl font-mono font-bold text-white">Loading...</h2>
+        <button onclick="getIP()" class="mt-8 text-amber-500 hover:text-white border border-amber-500 hover:bg-amber-600 px-6 py-2 rounded-full transition">Refresh</button>
+    </div>
+</div>
+
+<script>
+    async function getIP() {
+        document.getElementById('ipDisplay').innerText = "Fetching...";
+        const res = await fetch('/api/my-ip');
+        const data = await res.json();
+        document.getElementById('ipDisplay').innerText = data.ip;
+    }
+    getIP(); // Auto load on page open
+</script>
+{% endblock %}

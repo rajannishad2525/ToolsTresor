@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-8 py-20 text-center">
+    
+    <h1 class="text-5xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-amber-500 to-orange-600 bg-clip-text text-transparent leading-tight">
+        Need Free Tools? <br class="hidden md:block" /> You're in the Right Place.
+    </h1>
+    <p class="text-lg text-slate-400 mb-12 max-w-2xl mx-auto">
+        Simple, fast, and secure online tools. No installation required. Access everything for free instantly.
+    </p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
+        
+        {% for tool in tools %}
+        <a href="{{ url_for(tool.route_name) }}" class="group block h-full">
+            <div class="bg-slate-900 border border-slate-800 p-8 rounded-xl hover:border-amber-500 transition-all hover:shadow-lg hover:shadow-amber-500/10 h-full flex flex-col">
+                
+                <div class="bg-amber-500/10 w-12 h-12 flex items-center justify-center rounded-lg mb-4 group-hover:bg-amber-500/20 transition">
+                    <span class="text-2xl">{{ tool.icon }}</span>
+                </div>
+                
+                <h3 class="text-xl font-bold text-white mb-2 group-hover:text-amber-500 transition">
+                    {{ tool.name }}
+                </h3>
+                
+                <p class="text-slate-400 text-sm">
+                    {{ tool.description }}
+                </p>
+            </div>
+        </a>
+        {% else %}
+            <div class="col-span-1 sm:col-span-2 lg:col-span-3 text-center py-12 border border-dashed border-slate-700 rounded-xl bg-slate-900/50">
+                <p class="text-slate-500 text-lg">No tools are currently active. Please check back later.</p>
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <section class="mt-20 bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-2xl p-12 shadow-2xl">
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-3xl font-bold text-white mb-8">Why Choose Toolstresor?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="text-4xl font-extrabold text-amber-500 mb-2">100%</div>
+                    <p class="text-slate-300 font-medium">Free to Use</p>
+                </div>
+                <div>
+                    <div class="text-4xl font-extrabold text-amber-500 mb-2">0</div>
+                    <p class="text-slate-300 font-medium">No Registration Needed</p>
+                </div>
+                <div>
+                    <div class="text-4xl font-extrabold text-amber-500 mb-2">10+</div>
+                    <p class="text-slate-300 font-medium">Tools Available</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+{% endblock %}

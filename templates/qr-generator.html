@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-8 py-12">
+    <div class="text-center mb-10">
+        <h1 class="text-4xl font-bold text-amber-500 mb-2">QR Code Generator</h1>
+        <p class="text-slate-400">Convert URL or Text into a QR Code. (Backend Powered)</p>
+    </div>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-lg p-8 shadow-xl flex flex-col items-center">
+        <input type="text" id="qrInput" class="w-full max-w-lg bg-slate-950 border border-slate-700 rounded-lg p-4 text-white focus:border-amber-500 outline-none mb-6" placeholder="Enter website link or text...">
+        
+        <button onclick="generateQR()" id="qrBtn" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-8 rounded-lg transition mb-8 flex items-center gap-2">
+            <span>Generate QR</span>
+        </button>
+
+        <div id="errorMsg" class="hidden text-red-400 bg-red-400/10 border border-red-400/20 px-4 py-2 rounded mb-4 text-sm"></div>
+
+        <div id="qrResult" class="hidden flex-col items-center animate-fade-in">
+            <div class="bg-white p-4 rounded-lg shadow-lg">
+                <img id="qrImage" src="" alt="QR Code" class="w-64 h-64">
+            </div>
+            <a id="downloadLink" href="#" download="qrcode.png" class="mt-6 inline-flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-lg transition text-sm font-medium">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                Download Image
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function generateQR() {
+        const text = document.getElementById('qrInput').value;
+        const errorDiv = document.getElementById('errorMsg');
+        const qrResult = document.getElementById('qrResult');
+        const btn = document.getElementById('qrBtn');
+        
+        // Reset UI
+        errorDiv.classList.add('hidden');
+        qrResult.classList.add('hidden');
+        
+        if(!text) {
+            errorDiv.innerText = "⚠️ Please enter some text or URL first.";
+            errorDiv.classList.remove('hidden');
+            return;
+        }
+
+        // Loading State
+        const originalBtnText = btn.innerHTML;
+        btn.innerHTML = "Generating...";
+        btn.disabled = true;
+        
+        try {
+            // Backend Call (Python Logic)
+            const res = await fetch('/api/qr-generator', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({text: text})
+            });
+            
+            if(res.ok) {
+                // Success: Convert Blob to Image
+                const blob = await res.blob();
+                const url = URL.createObjectURL(blob);
+                
+                document.getElementById('qrImage').src = url;
+                document.getElementById('downloadLink').href = url;
+                qrResult.classList.remove('hidden');
+                qrResult.classList.add('flex');
+            } else {
+                // Server Error
+                const data = await res.json();
+                throw new Error(data.error || "Server Error");
+            }
+        } catch(e) {
+            errorDiv.innerText = "❌ Error: " + e.message;
+            errorDiv.classList.remove('hidden');
+        } finally {
+            btn.innerHTML = originalBtnText;
+            btn.disabled = false;
+        }
+    }
+</script>
+{% endblock %}

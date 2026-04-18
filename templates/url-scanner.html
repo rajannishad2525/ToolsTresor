@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-8 py-12 text-center">
+    <h1 class="text-4xl font-bold text-amber-500 mb-2">URL Scanner & Unshortener</h1>
+    <p class="text-slate-400 mb-10">Reveal the real destination of suspicious short links.</p>
+
+    <div class="bg-slate-900 border border-slate-800 rounded-lg p-8 shadow-xl max-w-2xl mx-auto">
+        <input type="text" id="urlInput" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-4 text-white focus:border-amber-500 outline-none mb-6 transition" placeholder="Paste short URL (e.g. bit.ly/xyz)...">
+        
+        <button onclick="scanUrl()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition shadow-lg">
+            🔍 Reveal Original URL
+        </button>
+
+        <div id="resultBox" class="hidden mt-8 p-4 bg-black/30 border border-slate-700 rounded-lg text-left">
+            <p class="text-xs text-slate-500 uppercase font-bold mb-1">Real Destination:</p>
+            <a id="realUrl" href="#" target="_blank" class="text-green-400 font-mono break-all hover:underline text-lg"></a>
+            <p class="text-xs text-slate-500 mt-2">Status Code: <span id="statusCode" class="text-white"></span></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function scanUrl() {
+        const url = document.getElementById('urlInput').value;
+        if(!url) return alert("Enter a URL!");
+        
+        const btn = document.querySelector('button');
+        btn.innerText = "Scanning...";
+        
+        try {
+            const res = await fetch('/api/url-scanner', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({url: url})
+            });
+            const data = await res.json();
+            
+            if(data.real_url) {
+                document.getElementById('realUrl').innerText = data.real_url;
+                document.getElementById('realUrl').href = data.real_url;
+                document.getElementById('statusCode').innerText = data.status;
+                document.getElementById('resultBox').classList.remove('hidden');
+            } else {
+                alert("Invalid URL");
+            }
+        } catch(e) { alert("Error"); }
+        
+        btn.innerText = "🔍 Reveal Original URL";
+    }
+</script>
+{% endblock %}

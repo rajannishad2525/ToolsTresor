@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-3xl mx-auto px-8 py-12">
+    <h1 class="text-4xl font-bold text-center text-amber-500 mb-8">Your Digital Footprint</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-slate-900 p-6 rounded border border-slate-800">
+            <h3 class="text-slate-400 text-sm uppercase">IP Address</h3>
+            <p id="ip" class="text-2xl text-white font-mono">Loading...</p>
+        </div>
+        <div class="bg-slate-900 p-6 rounded border border-slate-800">
+            <h3 class="text-slate-400 text-sm uppercase">Browser / OS</h3>
+            <p id="agent" class="text-white text-sm"></p>
+        </div>
+        <div class="bg-slate-900 p-6 rounded border border-slate-800">
+            <h3 class="text-slate-400 text-sm uppercase">Screen Resolution</h3>
+            <p id="screen" class="text-xl text-white"></p>
+        </div>
+        <div class="bg-slate-900 p-6 rounded border border-slate-800">
+            <h3 class="text-slate-400 text-sm uppercase">Battery Level</h3>
+            <p id="battery" class="text-xl text-green-400">Checking...</p>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('agent').innerText = navigator.userAgent;
+    document.getElementById('screen').innerText = screen.width + " x " + screen.height;
+    
+    fetch('/api/my-ip').then(r=>r.json()).then(d=> document.getElementById('ip').innerText = d.ip);
+
+    if(navigator.getBattery) {
+        navigator.getBattery().then(b => {
+            document.getElementById('battery').innerText = Math.round(b.level * 100) + "%";
+        });
+    } else {
+        document.getElementById('battery').innerText = "Not Available";
+    }
+</script>
+{% endblock %}

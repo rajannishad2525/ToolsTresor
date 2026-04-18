@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto px-8 py-12">
+    
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-white">Add New Tool</h1>
+        <a href="{{ url_for('admin_panel') }}" class="text-slate-400 hover:text-white transition">← Back to Dashboard</a>
+    </div>
+
+    <div class="bg-slate-900 border border-slate-800 p-8 rounded-lg shadow-lg">
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="bg-red-500/20 border border-red-500 text-red-200 px-4 py-2 rounded mb-6 text-sm">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" class="space-y-6">
+            
+            <div>
+                <label class="block text-slate-400 mb-2 text-sm font-bold">Tool Name</label>
+                <input type="text" name="name" required 
+                    class="w-full bg-slate-950 border border-slate-700 rounded p-3 text-white focus:border-amber-500 outline-none placeholder-slate-700" 
+                    placeholder="e.g. Image Steganography">
+            </div>
+
+            <div>
+                <label class="block text-slate-400 mb-2 text-sm font-bold">Route Function Name</label>
+                <input type="text" name="route" required 
+                    class="w-full bg-slate-950 border border-slate-700 rounded p-3 text-amber-500 font-mono text-sm focus:border-amber-500 outline-none placeholder-slate-700" 
+                    placeholder="e.g. page_word_counter">
+                <p class="text-xs text-slate-500 mt-2">
+                    ⚠️ This must match the function name inside <code>app.py</code> (e.g., <code>def page_word_counter():</code>)
+                </p>
+            </div>
+
+            <div>
+                <label class="block text-slate-400 mb-2 text-sm font-bold">Short Description</label>
+                <input type="text" name="description" required 
+                    class="w-full bg-slate-950 border border-slate-700 rounded p-3 text-white focus:border-amber-500 outline-none placeholder-slate-700" 
+                    placeholder="e.g. Hide text inside images securely.">
+            </div>
+
+            <div>
+                <label class="block text-slate-400 mb-2 text-sm font-bold">Icon (Emoji)</label>
+                <input type="text" name="icon" required 
+                    class="w-full bg-slate-950 border border-slate-700 rounded p-3 text-white focus:border-amber-500 outline-none placeholder-slate-700" 
+                    placeholder="e.g. 🕵️‍♂️">
+            </div>
+
+            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition shadow-lg transform hover:scale-[1.02]">
+                + Add Tool to Website
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

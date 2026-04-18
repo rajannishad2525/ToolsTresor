@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-8 py-20 text-center">
+    <div class="bg-slate-900 border border-slate-800 rounded-lg p-10 shadow-xl max-w-2xl mx-auto">
+        {% if content %}
+            <h1 class="text-3xl font-bold text-green-500 mb-6">Secret Note</h1>
+            <div class="bg-black/50 p-6 rounded border border-green-900 text-left text-white font-mono whitespace-pre-wrap leading-relaxed">{{ content }}</div>
+            <p class="text-red-400 mt-6 text-sm font-bold animate-pulse">⚠️ This note has been destroyed. You cannot view it again.</p>
+        {% else %}
+            <h1 class="text-3xl font-bold text-red-500 mb-4">Note Not Found</h1>
+            <p class="text-slate-400">{{ error }}</p>
+        {% endif %}
+        
+        <a href="{{ url_for('home') }}" class="block mt-8 text-slate-500 hover:text-white">Return Home</a>
+    </div>
+</div>
+{% endblock %}
